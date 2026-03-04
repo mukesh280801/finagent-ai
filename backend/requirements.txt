@@ -9,3 +9,4 @@ pytesseract
 pandas
 matplotlib
 python-dotenv
+pymupdf
