@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = "https://finagent-ai-bjd3.onrender.com"
 
 st.set_page_config(page_title="FinAgent AI", layout="wide")
 
