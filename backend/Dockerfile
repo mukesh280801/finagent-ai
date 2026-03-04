@@ -1,17 +1,14 @@
 FROM python:3.11-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    tesseract-ocr \
-    libgl1 \
-    poppler-utils \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 
-COPY requirements.txt .
+# Copy backend requirements (since that's where it exists)
+COPY backend/requirements.txt requirements.txt
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "10000"]
+EXPOSE 10000
+
+CMD ["streamlit", "run", "streamlit_app.py", "--server.port=10000", "--server.address=0.0.0.0"]

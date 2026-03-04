@@ -10,3 +10,5 @@ pandas
 matplotlib
 python-dotenv
 pymupdf
+streamlit
+requests
