@@ -4,6 +4,7 @@ import shutil
 import os
 import pytesseract
 from PIL import Image
+import re
 
 app = FastAPI()
 
@@ -14,10 +15,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.get("/")
-def home():
-    return {"message": "FinAgent Backend Running"}
 
 @app.post("/analyze")
 async def analyze(file: UploadFile = File(...)):
@@ -30,19 +27,14 @@ async def analyze(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # 🔥 OCR PART
+    # 🔥 OCR
     image = Image.open(file_path)
-    extracted_text = pytesseract.image_to_string(image)
+    text = pytesseract.image_to_string(image)
 
-    # 🔥 Simple amount extraction
-    import re
-    amounts = re.findall(r'\d+\.\d+|\d+', extracted_text)
-
-    total_amount = amounts[-1] if amounts else "Not found"
+    amounts = re.findall(r'\d+\.\d+|\d+', text)
+    total = amounts[-1] if amounts else "Not found"
 
     return {
-        "status": "success",
-        "filename": file.filename,
-        "extracted_text": extracted_text,
-        "total_amount": total_amount
+        "text": text,
+        "total_amount": total
     }
